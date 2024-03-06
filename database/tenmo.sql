@@ -72,3 +72,5 @@ INSERT INTO transfer_type (transfer_type_desc) VALUES ('Request');
 INSERT INTO transfer_type (transfer_type_desc) VALUES ('Send');
 
 COMMIT;
+
+select * from transfer_status
