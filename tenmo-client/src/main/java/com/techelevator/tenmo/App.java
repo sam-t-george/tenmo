@@ -121,9 +121,22 @@ public class App {
         System.out.println("Users");
         System.out.println("ID          Name                  ");
         System.out.println("-------------------------------------------");
-        List<User> foundUsers =  tenmoService.getAllUsersExceptMyself();
-        for (User user : foundUsers) {
+        List<User> availableUsers =  tenmoService.getAllUsersExceptMyself();
+        for (User user : availableUsers) {
             System.out.println(user.getId() + "      " + user.getUsername());
+        }
+
+        int selectedUserId = consoleService.promptForInt("Enter ID of user you are sending to (0 to cancel):");
+        if (selectedUserId == 0) {
+            return;
+        }
+
+        for (User user : availableUsers) {
+            if (user.getId() == selectedUserId) {
+//                user.sendMoney();
+//                currentUser.takeMoney();
+                System.out.println("this works");
+            }
         }
 	}
 

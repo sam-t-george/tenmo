@@ -27,6 +27,10 @@ public class JdbcAccountDao implements AccountDao{
         return balance;
     }
 
+    public void moneyLeavesAccount();
+
+    public void moneyAddedToAccount();
+    
 //    private Account mapRowToAccount(SqlRowSet rowSet) {
 //        Account account = new Account();
 //        account.setBalance(rowSet.getDouble("balance"));
