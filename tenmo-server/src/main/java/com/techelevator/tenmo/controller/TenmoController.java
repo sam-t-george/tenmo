@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @PreAuthorize("isAuthenticated()")
@@ -27,5 +29,18 @@ public class TenmoController {
         User currentUser = userDao.getUserByUsername(principal.getName());
         double balance = accountDao.getAccountBalanceByUserId(currentUser.getId());
         return balance;
+    }
+
+    @RequestMapping(path="/users", method = RequestMethod.GET)
+    public List<User> getAllUsersExceptMyself(Principal principal) {
+        List<User> allUsers = userDao.getUsers();
+        List<User> allUsersExceptMyself = new ArrayList<>();
+        User currentUser = userDao.getUserByUsername(principal.getName());
+        for (User user : allUsers) {
+            if ( !(user.equals(currentUser)) ) {
+                allUsersExceptMyself.add(user);
+            }
+        }
+        return allUsersExceptMyself;
     }
 }

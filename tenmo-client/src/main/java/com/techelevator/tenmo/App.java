@@ -1,10 +1,13 @@
 package com.techelevator.tenmo;
 
 import com.techelevator.tenmo.model.AuthenticatedUser;
+import com.techelevator.tenmo.model.User;
 import com.techelevator.tenmo.model.UserCredentials;
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.ConsoleService;
 import com.techelevator.tenmo.services.TenmoService;
+
+import java.util.List;
 
 public class App {
 
@@ -114,11 +117,17 @@ public class App {
 
 	private void sendBucks() {
 		// TODO Auto-generated method stub
-		
+        System.out.println("-------------------------------------------");
+        System.out.println("Users");
+        System.out.println("ID          Name                  ");
+        System.out.println("-------------------------------------------");
+        List<User> foundUsers =  tenmoService.getAllUsersExceptMyself();
+        for (User user : foundUsers) {
+            System.out.println(user.getId() + "      " + user.getUsername());
+        }
 	}
 
 	private void requestBucks() {
-		// TODO Auto-generated method stub
 		
 	}
 

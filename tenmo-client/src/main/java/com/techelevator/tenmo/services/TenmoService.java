@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class TenmoService {
@@ -22,6 +25,15 @@ public class TenmoService {
         String url = BASE_API_URL + "account/balance";
         ResponseEntity<Double> response = restTemplate.exchange(url, HttpMethod.GET, makeAuthEntity(currentUser), Double.class);
         return response.getBody();
+    }
+
+    public List<User> getAllUsersExceptMyself() {
+        List<User> users = new ArrayList<>();
+        String url = BASE_API_URL + "users";
+        ResponseEntity<User[]> response = restTemplate.exchange(url, HttpMethod.GET,
+                makeAuthEntity(currentUser), User[].class);
+        users = Arrays.asList(response.getBody());
+        return users;
     }
 
 
