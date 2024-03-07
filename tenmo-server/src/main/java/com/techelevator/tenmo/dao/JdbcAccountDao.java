@@ -27,16 +27,34 @@ public class JdbcAccountDao implements AccountDao{
         return balance;
     }
 
-    public void moneyLeavesAccount();
+    @Override
+    public void moneyLeavesAccount(int accountIdFrom, double amountToSpend) {
+        String sql = "UPDATE account SET balance = (balance - ?) WHERE account_id = ?;";
+        jdbcTemplate.update(sql, amountToSpend, accountIdFrom);
+    }
+    @Override
+    public void moneyAddedToAccount(int accountIdTo, double amountToReceive) {
+        String sql = "UPDATE account SET balance = (balance + ?) WHERE account_id = ?;";
+        jdbcTemplate.update(sql, accountIdTo, amountToReceive);
+    }
+    @Override
+    public Account getAccountByUserId (int userId) {
+        Account account = null;
+        String sql = "SELECT account_id, user_id, balance FROM account WHERE user_id = 1001";
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql, userId);
+        while (rowSet.next()) {
+            account = mapRowToAccount(rowSet);
+        }
+        return account;
+    }
 
-    public void moneyAddedToAccount();
-    
-//    private Account mapRowToAccount(SqlRowSet rowSet) {
-//        Account account = new Account();
-//        account.setBalance(rowSet.getDouble("balance"));
-//        account.setAccountId(rowSet.getInt("account_id"));
-//        account.setUserId(rowSet.getInt("user_id"));
-//        return account;
-//    }
+
+    private Account mapRowToAccount(SqlRowSet rowSet) {
+        Account account = new Account();
+        account.setBalance(rowSet.getDouble("balance"));
+        account.setAccountId(rowSet.getInt("account_id"));
+        account.setUserId(rowSet.getInt("user_id"));
+        return account;
+    }
 
 }

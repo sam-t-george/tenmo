@@ -3,6 +3,7 @@ package com.techelevator.tenmo.controller;
 import com.techelevator.tenmo.dao.AccountDao;
 import com.techelevator.tenmo.dao.JdbcAccountDao;
 import com.techelevator.tenmo.dao.UserDao;
+import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -42,5 +43,16 @@ public class TenmoController {
             }
         }
         return allUsersExceptMyself;
+    }
+
+    @RequestMapping(path="/sendBucks", method = RequestMethod.POST)
+    public void sendBucks(int userIdFrom, int userIdTo, int amountToTransfer, Principal principal) {
+        User currentUser = userDao.getUserByUsername(principal.getName());
+
+
+        Account senderAccount = accountDao.getAccountByUserId(userIdFrom);
+        accountDao.moneyLeavesAccount(senderAccount.getAccountId(), amountToTransfer);
+        Account recipientAccount = accountDao.getAccountByUserId(userIdTo);
+        accountDao.moneyAddedToAccount(recipientAccount.getAccountId(), amountToTransfer);
     }
 }
