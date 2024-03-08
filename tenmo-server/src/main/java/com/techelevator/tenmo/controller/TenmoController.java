@@ -54,11 +54,11 @@ public class TenmoController {
                 receiverAccount.getAccountId(), transfer.getAmount());
     }
 
-    @RequestMapping(path="/accounts/my_account")
-    public Account getAccountByUserId (Principal principal) {
-        User currentUser = userDao.getUserByUsername(principal.getName());
-        //TODO ADD TO TRANSFER TABLE
-        return accountDao.getAccountByUserId(currentUser.getId());
-    }
+//    @RequestMapping(path="/accounts/my_account")
+//    public Account getAccountByUserId (Principal principal) {
+//        User currentUser = userDao.getUserByUsername(principal.getName());
+//        //TODO ADD TO TRANSFER TABLE
+//        return accountDao.getAccountByUserId(currentUser.getId());
+//    }
 
 }
