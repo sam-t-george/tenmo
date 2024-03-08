@@ -8,5 +8,9 @@ public interface AccountDao {
 
     void moneyLeavesAccount(int accountIdFrom, double amountToSpend);
 
+    void transferMoneyBetweenAccounts(int accountFrom, int accountTo, double amount);
+
     Account getAccountByUserId (int userId);
+    Account getAccountByUserName (String userName);
+    Account getAccountById (int accountId);
 }

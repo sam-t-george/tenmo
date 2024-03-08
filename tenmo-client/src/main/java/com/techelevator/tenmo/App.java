@@ -1,6 +1,7 @@
 package com.techelevator.tenmo;
 
 import com.techelevator.tenmo.model.AuthenticatedUser;
+import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.User;
 import com.techelevator.tenmo.model.UserCredentials;
 import com.techelevator.tenmo.services.AuthenticationService;
@@ -122,6 +123,7 @@ public class App {
         System.out.println("ID          Name                  ");
         System.out.println("-------------------------------------------");
         List<User> availableUsers =  tenmoService.getAllUsersExceptMyself();
+
         for (User user : availableUsers) {
             System.out.println(user.getId() + "      " + user.getUsername());
         }
@@ -131,13 +133,13 @@ public class App {
             return;
         }
 
-        for (User user : availableUsers) {
-            if (user.getId() == selectedUserId) {
-//                user.sendMoney();
-//                currentUser.takeMoney();
-                System.out.println("this works");
-            }
-        }
+        double selectedAmount = consoleService.promptForBigDecimal("Enter the amount to transfer:").doubleValue();
+
+        Transfer transfer = new Transfer(1, 2, 0,
+                tenmoService.getAccountByUserId(currentUser.getUser().getId()).getAccountId(),
+                tenmoService.getAccountByUserId(selectedUserId).getAccountId(), selectedAmount);
+
+        tenmoService.sendBucks(transfer);
 	}
 
 	private void requestBucks() {

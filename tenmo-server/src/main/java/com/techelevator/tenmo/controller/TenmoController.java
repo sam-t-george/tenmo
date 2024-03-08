@@ -2,6 +2,7 @@ package com.techelevator.tenmo.controller;
 
 import com.techelevator.tenmo.dao.AccountDao;
 import com.techelevator.tenmo.dao.JdbcAccountDao;
+import com.techelevator.tenmo.dao.Transfer;
 import com.techelevator.tenmo.dao.UserDao;
 import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.User;
@@ -45,14 +46,19 @@ public class TenmoController {
         return allUsersExceptMyself;
     }
 
-    @RequestMapping(path="/sendBucks", method = RequestMethod.POST)
-    public void sendBucks(int userIdFrom, int userIdTo, int amountToTransfer, Principal principal) {
-        User currentUser = userDao.getUserByUsername(principal.getName());
-
-
-        Account senderAccount = accountDao.getAccountByUserId(userIdFrom);
-        accountDao.moneyLeavesAccount(senderAccount.getAccountId(), amountToTransfer);
-        Account recipientAccount = accountDao.getAccountByUserId(userIdTo);
-        accountDao.moneyAddedToAccount(recipientAccount.getAccountId(), amountToTransfer);
+    @RequestMapping(path="/send_bucks", method = RequestMethod.POST)
+    public void sendBucks (Principal principal, @RequestBody Transfer transfer) {
+        Account senderAccount = accountDao.getAccountByUserName(principal.getName());
+        Account receiverAccount = accountDao.getAccountById(transfer.getAccountTo());
+        accountDao.transferMoneyBetweenAccounts(senderAccount.getAccountId(),
+                receiverAccount.getAccountId(), transfer.getAmount());
     }
+
+    @RequestMapping(path="/accounts/my_account")
+    public Account getAccountByUserId (Principal principal) {
+        User currentUser = userDao.getUserByUsername(principal.getName());
+        //TODO ADD TO TRANSFER TABLE
+        return accountDao.getAccountByUserId(currentUser.getId());
+    }
+
 }

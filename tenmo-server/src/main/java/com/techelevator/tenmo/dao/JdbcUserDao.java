@@ -56,24 +56,6 @@ public class JdbcUserDao implements UserDao {
         return users;
     }
 
-
-
-
-//    @Override
-//    public List<User> getAllUsersExceptMyself(int currentUserId) {
-//        List<User> otherUsers = new ArrayList<>();
-//        String sql = "SELECT user_id, username, password_hash, role FROM tenmo_user WHERE user_id != ?;";
-//        try {
-//            SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql, currentUserId);
-//            while (rowSet.next()) {
-//                otherUsers.add(mapRowToUser(rowSet));
-//            }
-//        } catch (CannotGetJdbcConnectionException e) {
-//            throw new DaoException("Unable to connect to server or database");
-//        }
-//        return otherUsers;
-//    }
-
     @Override
     public User getUserByUsername(String username) {
         if (username == null) throw new IllegalArgumentException("Username cannot be null");
