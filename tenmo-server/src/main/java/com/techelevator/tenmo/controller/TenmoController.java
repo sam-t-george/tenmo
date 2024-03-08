@@ -1,6 +1,7 @@
 package com.techelevator.tenmo.controller;
 
 import com.techelevator.tenmo.dao.AccountDao;
+import com.techelevator.tenmo.dao.TransferDao;
 import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.dao.UserDao;
 import com.techelevator.tenmo.model.User;
@@ -16,6 +17,7 @@ import java.util.List;
 public class TenmoController {
     private AccountDao accountDao;
     private UserDao userDao;
+    private TransferDao transferDao;
 
     public TenmoController(AccountDao accountDao, UserDao userDao) {
         this.accountDao = accountDao;
@@ -42,11 +44,26 @@ public class TenmoController {
         return allUsersExceptMyself;
     }
 
-    @RequestMapping(path="/send_bucks", method = RequestMethod.POST)
+    @RequestMapping(path="/send_bucks", method = RequestMethod.PUT)
     public void sendBucks (Principal principal, @RequestBody Transfer transfer) {
-        User userFrom = userDao.getUserByUsername(principal.getName());
-        User userTo = userDao.getUserById(transfer.getUserIdTo());
-        accountDao.transferMoneyBetweenAccounts(userFrom.getId(), userTo.getId(), transfer.getAmount());
+            User userFrom = userDao.getUserByUsername(principal.getName());
+            User userTo = userDao.getUserById(transfer.getUserIdTo());
+            accountDao.transferMoneyBetweenAccounts(userFrom.getId(), userTo.getId(), transfer.getAmount());
+    }
+
+
+//    @RequestMapping(path="/send_bucks", method = RequestMethod.PUT)
+//    public int sendBucks (Principal principal, @RequestBody Transfer transfer) {
+//        User userFrom = userDao.getUserByUsername(principal.getName());
+//        User userTo = userDao.getUserById(transfer.getUserIdTo());
+//        Transfer createdTransfer = transferDao.createTransfer(transfer);
+//        int status = createdTransfer.setTransferStatusId(2);
+//        return status;
+//    }
+
+    @RequestMapping(path="/user/{user_id}", method= RequestMethod.GET)
+    public User getUserById (@PathVariable int user_id) {
+        return userDao.getUserById(user_id);
     }
 
 }

@@ -102,7 +102,7 @@ public class App {
 
 	private void viewCurrentBalance() {
 		// TODO Auto-generated method stub
-        System.out.println("Your current account balance is: $" + tenmoService.getAccountBalanceByUserId());
+        System.out.println("Your current account balance is: $" + tenmoService.getAccountBalanceByUserId(currentUser.getUser().getId()));
 
 	}
 
@@ -137,14 +137,21 @@ public class App {
             return;
         }
 
+        if ( !(availableUsers.contains(tenmoService.getUserById(selectedUserId))) ) {
             System.out.println("Please select a valid userId");
             return;
         }
 
         double selectedAmount = consoleService.promptForBigDecimal("Enter the amount to transfer:").doubleValue();
 
-        Transfer transfer = new Transfer(currentUser.getUser().getId(), selectedUserId, selectedAmount);
 
+        if (selectedAmount <= 0 || selectedAmount >=
+                tenmoService.getAccountBalanceByUserId(currentUser.getUser().getId())) {
+            System.out.println("Please enter a valid amount");
+            return;
+        }
+
+        Transfer transfer = new Transfer(currentUser.getUser().getId(), selectedUserId, selectedAmount);
         tenmoService.sendBucks(transfer);
 	}
 

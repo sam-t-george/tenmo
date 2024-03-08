@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class JdbcAccountDao implements AccountDao{
     private JdbcTemplate jdbcTemplate;
+    private TransferDao transferDao;
 
 
     public JdbcAccountDao (JdbcTemplate jdbcTemplate) {
@@ -28,11 +29,18 @@ public class JdbcAccountDao implements AccountDao{
 
     @Override
     public void transferMoneyBetweenAccounts(int userIdFrom, int userIdTo, double amount) {
-        Transfer transfer = new Transfer();
         moneyLeavesAccount(amount, userIdFrom);
         moneyAddedToAccount(amount, userIdTo);
-        transfer.setAmount(amount);
+//        Transfer transfer = new Transfer();
+//        transfer.setTransferTypeId(2);
+//        transfer.setTransferStatusId(2);
+//        transfer.setUserIdFrom(userIdFrom);
+//        transfer.setUserIdTo(userIdTo);
+//        transfer.setAmount(amount);
+//        transferDao.createTransfer(transfer); // puts info in database and gives us transfer id
     }
+
+
 
     @Override
     public Account getAccountByUserId (int userId) {

@@ -12,6 +12,7 @@ public interface AccountDao {
 
 
 
+
     Account getAccountByUserId (int userId);
 //    Account getAccountByUserName (String userName);
 //    Account getAccountById (int accountId);
