@@ -132,6 +132,14 @@ public class App {
         if (selectedUserId == 0) {
             return;
         }
+        if (selectedUserId == currentUser.getUser().getId()) {
+            System.out.println("Please select a valid userId");
+            return;
+        }
+
+            System.out.println("Please select a valid userId");
+            return;
+        }
 
         double selectedAmount = consoleService.promptForBigDecimal("Enter the amount to transfer:").doubleValue();
 
@@ -141,7 +149,7 @@ public class App {
 	}
 
 	private void requestBucks() {
-		
+
 	}
 
 }
