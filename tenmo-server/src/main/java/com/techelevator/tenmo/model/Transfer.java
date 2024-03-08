@@ -1,10 +1,11 @@
 package com.techelevator.tenmo.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.jetbrains.annotations.NotNull;
 
+import javax.validation.constraints.NotNull;
 
 public class Transfer {
+
     private int transferId;
     private int transferTypeId;
     private int transferStatusId;
@@ -12,11 +13,16 @@ public class Transfer {
     private int userIdTo;
     private double amount;
 
-    public Transfer(int userIdFrom, int userIdTo, double amount) {
+    public Transfer(int transferId, int transferTypeId, int transferStatusId, int userIdFrom, int userIdTo, double amount) {
+        this.transferId = transferId;
+        this.transferTypeId = transferTypeId;
+        this.transferStatusId = transferStatusId;
         this.userIdFrom = userIdFrom;
         this.userIdTo = userIdTo;
         this.amount = amount;
     }
+
+    public Transfer(){};
 
     public int getTransferId() {
         return transferId;

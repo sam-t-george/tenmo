@@ -18,7 +18,7 @@ import java.util.List;
 
 
 public class TenmoService {
-    private final String BASE_API_URL = "http://localhost:8080/";
+    private final String BASE_API_URL = "http://localhost:8080";
     private AuthenticatedUser currentUser;
     private RestTemplate restTemplate = new RestTemplate();
 
@@ -27,19 +27,19 @@ public class TenmoService {
     }
 
     public double getAccountBalanceByUserId() {
-        String url = BASE_API_URL + "account/balance";
+        String url = BASE_API_URL + "/account/balance";
         ResponseEntity<Double> response = restTemplate.exchange(url, HttpMethod.GET, makeAuthEntity(currentUser), Double.class);
         return response.getBody();
     }
     public Account getAccountByUserId(int userId) {
-        String url = BASE_API_URL + "accounts/my_account";
+        String url = BASE_API_URL + "/accounts/my_account";
         ResponseEntity<Account> response = restTemplate.exchange(url, HttpMethod.GET,
                 makeAuthEntity(currentUser), Account.class);
         return response.getBody();
     }
     public List<User> getAllUsersExceptMyself() {
         List<User> users = new ArrayList<>();
-        String url = BASE_API_URL + "users";
+        String url = BASE_API_URL + "/users";
         ResponseEntity<User[]> response = restTemplate.exchange(url, HttpMethod.GET,
                 makeAuthEntity(currentUser), User[].class);
         users = Arrays.asList(response.getBody());
@@ -47,14 +47,11 @@ public class TenmoService {
     }
 
     public void sendBucks(Transfer transfer) {
-        String url = BASE_API_URL + "send_bucks";
+        String url = BASE_API_URL + "/send_bucks";
         HttpEntity<Transfer> h =  makeAuthEntity(currentUser, transfer);
         ResponseEntity<Void> response = restTemplate.exchange(url, HttpMethod.POST,
                 h, Void.class);
     }
-
-
-
 
 
 

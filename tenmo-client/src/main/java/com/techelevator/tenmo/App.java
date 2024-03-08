@@ -135,9 +135,7 @@ public class App {
 
         double selectedAmount = consoleService.promptForBigDecimal("Enter the amount to transfer:").doubleValue();
 
-        Transfer transfer = new Transfer(1, 2, 0,
-                tenmoService.getAccountByUserId(currentUser.getUser().getId()).getAccountId(),
-                tenmoService.getAccountByUserId(selectedUserId).getAccountId(), selectedAmount);
+        Transfer transfer = new Transfer(currentUser.getUser().getId(), selectedUserId, selectedAmount);
 
         tenmoService.sendBucks(transfer);
 	}
