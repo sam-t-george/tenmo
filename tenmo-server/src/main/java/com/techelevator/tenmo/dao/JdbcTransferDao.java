@@ -16,59 +16,69 @@ import java.util.List;
 public class JdbcTransferDao implements TransferDao{
     private JdbcTemplate jdbcTemplate;
     private AccountDao accountDao;
-    public JdbcTransferDao (JdbcTemplate jdbcTemplate) {
+    public JdbcTransferDao (JdbcTemplate jdbcTemplate, AccountDao accountDao) {
         this.jdbcTemplate = jdbcTemplate;
+        this.accountDao = accountDao;
     }
 
-    @Override
-    public void transferMoneyBetweenAccounts(int userIdFrom, int userIdTo, double amount) {
-        accountDao.moneyLeavesAccount(amount, userIdFrom);
-        accountDao.moneyAddedToAccount(amount, userIdTo);
-    }
+//    @Override
+//    public void transferMoneyBetweenAccounts(int userIdFrom, int userIdTo, double amount) {
+//        accountDao.moneyLeavesAccount(amount, userIdFrom);
+//        accountDao.moneyAddedToAccount(amount, userIdTo);
+//    }
 
     @Override
     public Transfer createTransfer(Transfer transfer) {
         Transfer newTransfer = null;
-        String sql = "INSERT INTO transfer (transfer_type_id, transfer_status_id, account_from, account_to, amount) " +
-                "VALUES (?, ?, ?, ?, ?) RETURNING transfer_id";
+        String sql =
+                "INSERT INTO transfer (transfer_type_id, transfer_status_id, account_from, account_to, amount) " +
+                "VALUES (" +
+                    "?, " +
+                    "?, " +
+                    "(SELECT account_id FROM account WHERE user_id = ?), " +
+                    "(SELECT account_id FROM account WHERE user_id = ?), " +
+                    "?" +
+                ") " +
+                "RETURNING transfer_id;";
         try {
             int newTransferId = jdbcTemplate.queryForObject(sql, int.class,
-                    newTransfer.getTransferTypeId(), newTransfer.getTransferStatusId(), newTransfer.getUserIdFrom(),
-                    newTransfer.getUserIdTo(), newTransfer.getAmount());
+                    transfer.getTransferTypeId(), transfer.getTransferStatusId(), transfer.getUserIdFrom(),
+                    transfer.getUserIdTo(), transfer.getAmount());
             newTransfer = getTransferById(newTransferId);
-            return newTransfer;
         } catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
         } catch (DataIntegrityViolationException e) {
             throw new DaoException("Data integrity violation", e);
         }
-
+        return newTransfer;
     }
 
     @Override
     public Transfer getTransferById(int transferId) {
-        Transfer transfer = new Transfer();
-        String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, " +
-                "account_from, account_to, amount " +
-                "FROM transfer WHERE transfer_id = ?";
-        try {
-            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, transferId);
-            if (results.next()) {
-                transfer = mapRowToTransfer(results);
+        Transfer transfer = null;
+        String sql =
+                "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount " +
+                "FROM transfer " +
+                "WHERE transfer_id = ?;";
+            SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql, transferId);
+            if (rowSet.next()) {
+                transfer = mapRowToTransfer(rowSet);
             }
-        } catch (CannotGetJdbcConnectionException e) {
-            throw new DaoException("Unable to connect to server or database", e);
-        }
-        return transfer;
+            return transfer;
     }
 
     public Transfer mapRowToTransfer (SqlRowSet rowSet) {
         Transfer transfer = new Transfer();
+        transfer.setTransferId(rowSet.getInt("transfer_id"));
         transfer.setTransferTypeId(rowSet.getInt("transfer_type_id"));
         transfer.setTransferStatusId(rowSet.getInt("transfer_status_id"));
-        transfer.setUserIdFrom(rowSet.getInt("account_from"));
-        transfer.setUserIdTo(rowSet.getInt("account_to"));
-        transfer.setAmount(rowSet.getDouble("amount"));
+        transfer.setUserIdFrom(
+                accountDao.getAccountById(rowSet.getInt("account_from")).getUserId()
+        );
+        transfer.setUserIdTo(
+                accountDao.getAccountById(rowSet.getInt("account_to")).getUserId()
+        );
+        transfer.setAmount(rowSet.getBigDecimal("amount"));
         return transfer;
     }
 

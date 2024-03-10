@@ -8,6 +8,7 @@ import com.techelevator.tenmo.model.User;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,15 +20,16 @@ public class TenmoController {
     private UserDao userDao;
     private TransferDao transferDao;
 
-    public TenmoController(AccountDao accountDao, UserDao userDao) {
+    public TenmoController(AccountDao accountDao, UserDao userDao, TransferDao transferDao) {
         this.accountDao = accountDao;
         this.userDao = userDao;
+        this.transferDao = transferDao;
     }
 
     @RequestMapping(path="/account/balance", method= RequestMethod.GET)
-    public double getAccountBalanceByUserId(Principal principal) {
+    public BigDecimal getAccountBalanceByUserId(Principal principal) {
         User currentUser = userDao.getUserByUsername(principal.getName());
-        double balance = accountDao.getAccountByUserId(currentUser.getId()).getBalance();
+        BigDecimal balance = accountDao.getAccountByUserId(currentUser.getId()).getBalance();
         return balance;
     }
 
@@ -45,10 +47,12 @@ public class TenmoController {
     }
 
     @RequestMapping(path="/send_bucks", method = RequestMethod.PUT)
-    public void sendBucks (Principal principal, @RequestBody Transfer transfer) {
+    public Transfer sendBucks (Principal principal, @RequestBody Transfer transfer) {
             User userFrom = userDao.getUserByUsername(principal.getName());
             User userTo = userDao.getUserById(transfer.getUserIdTo());
+            transfer = transferDao.createTransfer(transfer);
             accountDao.transferMoneyBetweenAccounts(userFrom.getId(), userTo.getId(), transfer.getAmount());
+            return transfer;
     }
 
 

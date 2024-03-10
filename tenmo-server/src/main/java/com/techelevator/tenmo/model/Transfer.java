@@ -3,6 +3,7 @@ package com.techelevator.tenmo.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 public class Transfer {
 
@@ -11,9 +12,9 @@ public class Transfer {
     private int transferStatusId;
     private int userIdFrom;
     private int userIdTo;
-    private double amount;
+    private BigDecimal amount;
 
-    public Transfer(int transferId, int transferTypeId, int transferStatusId, int userIdFrom, int userIdTo, double amount) {
+    public Transfer(int transferId, int transferTypeId, int transferStatusId, int userIdFrom, int userIdTo, BigDecimal amount) {
         this.transferId = transferId;
         this.transferTypeId = transferTypeId;
         this.transferStatusId = transferStatusId;
@@ -64,11 +65,11 @@ public class Transfer {
         this.userIdTo = userIdTo;
     }
 
-    public double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 }

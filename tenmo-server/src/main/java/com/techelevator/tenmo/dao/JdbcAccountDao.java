@@ -6,6 +6,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+
 @Component
 public class JdbcAccountDao implements AccountDao{
     private JdbcTemplate jdbcTemplate;
@@ -17,18 +19,18 @@ public class JdbcAccountDao implements AccountDao{
     }
 
     @Override
-    public void moneyLeavesAccount(double amountToSpend, int userIdFrom) {
+    public void moneyLeavesAccount(BigDecimal amountToSpend, int userIdFrom) {
         String sql = "UPDATE account SET balance = (balance - ?) WHERE user_id = ?;";
         jdbcTemplate.update(sql, amountToSpend, userIdFrom);
     }
     @Override
-    public void moneyAddedToAccount(double amountToReceive, int userIdTo) {
+    public void moneyAddedToAccount(BigDecimal amountToReceive, int userIdTo) {
         String sql = "UPDATE account SET balance = (balance + ?) WHERE user_id = ?;";
         jdbcTemplate.update(sql, amountToReceive, userIdTo);
     }
 
     @Override
-    public void transferMoneyBetweenAccounts(int userIdFrom, int userIdTo, double amount) {
+    public void transferMoneyBetweenAccounts(int userIdFrom, int userIdTo, BigDecimal amount) {
         moneyLeavesAccount(amount, userIdFrom);
         moneyAddedToAccount(amount, userIdTo);
 //        Transfer transfer = new Transfer();
@@ -55,7 +57,7 @@ public class JdbcAccountDao implements AccountDao{
 
     private Account mapRowToAccount(SqlRowSet rowSet) {
         Account account = new Account();
-        account.setBalance(rowSet.getDouble("balance"));
+        account.setBalance(rowSet.getBigDecimal("balance"));
         account.setAccountId(rowSet.getInt("account_id"));
         account.setUserId(rowSet.getInt("user_id"));
         return account;
@@ -79,16 +81,16 @@ public class JdbcAccountDao implements AccountDao{
 //        return account;
 //    }
 
-//    @Override
-//    public Account getAccountById (int accountId) {
-//        Account account = null;
-//        String sql = "SELECT account_id, user_id, balance FROM account WHERE account_id = ?";
-//        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql, accountId);
-//        while (rowSet.next()) {
-//            account = mapRowToAccount(rowSet);
-//        }
-//        return account;
-//    }
+    @Override
+    public Account getAccountById (int accountId) {
+        Account account = null;
+        String sql = "SELECT account_id, user_id, balance FROM account WHERE account_id = ?";
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql, accountId);
+        while (rowSet.next()) {
+            account = mapRowToAccount(rowSet);
+        }
+        return account;
+    }
 
 //    @Override
 //    public double getAccountBalanceByUserId(int userId) {

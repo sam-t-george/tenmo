@@ -117,7 +117,6 @@ public class App {
 	}
 
 	private void sendBucks() {
-		// TODO Auto-generated method stub
         System.out.println("-------------------------------------------");
         System.out.println("Users");
         System.out.println("ID          Name                  ");
@@ -154,6 +153,46 @@ public class App {
         Transfer transfer = new Transfer(currentUser.getUser().getId(), selectedUserId, selectedAmount);
         tenmoService.sendBucks(transfer);
 	}
+
+
+
+//    private void sendBucks() {
+//        System.out.println("-------------------------------------------");
+//        System.out.println("Users");
+//        System.out.println("ID          Name                  ");
+//        System.out.println("-------------------------------------------");
+//        List<User> availableUsers =  tenmoService.getAllUsersExceptMyself();
+//
+//        for (User user : availableUsers) {
+//            System.out.println(user.getId() + "      " + user.getUsername());
+//        }
+//
+//        int selectedUserId = consoleService.promptForInt("Enter ID of user you are sending to (0 to cancel):");
+//        if (selectedUserId == 0) {
+//            return;
+//        }
+//        if (selectedUserId == currentUser.getUser().getId()) {
+//            System.out.println("Please select a valid userId");
+//            return;
+//        }
+//
+//        if ( !(availableUsers.contains(tenmoService.getUserById(selectedUserId))) ) {
+//            System.out.println("Please select a valid userId");
+//            return;
+//        }
+//
+//        double selectedAmount = consoleService.promptForBigDecimal("Enter the amount to transfer:").doubleValue();
+//
+//
+//        if (selectedAmount <= 0 || selectedAmount >=
+//                tenmoService.getAccountBalanceByUserId(currentUser.getUser().getId())) {
+//            System.out.println("Please enter a valid amount");
+//            return;
+//        }
+//
+//        Transfer transfer = new Transfer(currentUser.getUser().getId(), selectedUserId, selectedAmount);
+//        tenmoService.sendBucks(transfer);
+//    }
 
 	private void requestBucks() {
 
