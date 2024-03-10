@@ -4,18 +4,9 @@ import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.AuthenticatedUser;
 import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.User;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.ResourceAccessException;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestClientResponseException;
+import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -58,11 +49,13 @@ public class TenmoService {
         return response.getBody();
     }
 
-    public void sendBucks(Transfer transfer) {
+    public Transfer sendBucks(Transfer requestTransfer) {
+        Transfer responseTransfer = null;
         String url = BASE_API_URL + "/send_bucks";
-            HttpEntity<Transfer> h = makeAuthEntity(currentUser, transfer);
-            ResponseEntity<Void> response = restTemplate.exchange(url, HttpMethod.PUT,
-                    h, Void.class);
+        ResponseEntity<Transfer> response = restTemplate.exchange(url, HttpMethod.POST,
+                makeTransferAuthEntity(currentUser, requestTransfer), Transfer.class);
+        responseTransfer = response.getBody();
+        return response.getBody();
     }
 
 
@@ -70,12 +63,19 @@ public class TenmoService {
 
     private HttpEntity<Void> makeAuthEntity(AuthenticatedUser user) {
         HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(currentUser.getToken());
         return new HttpEntity<>(headers);
     }
-    private HttpEntity<Transfer> makeAuthEntity(AuthenticatedUser user, Transfer Body) {
+    private HttpEntity<Transfer> makeTransferAuthEntity(AuthenticatedUser user, Transfer transfer) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(currentUser.getToken());
+        return new HttpEntity<>(transfer, headers);
+    }
+    private HttpEntity<Void> makeAuthEntity() {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(currentUser.getToken());
-        return new HttpEntity<Transfer>(Body, headers);
+        return new HttpEntity<>(headers);
     }
 }

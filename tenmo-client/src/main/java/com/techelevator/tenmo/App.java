@@ -115,8 +115,8 @@ public class App {
 		// TODO Auto-generated method stub
 		
 	}
-
-	private void sendBucks() {
+    
+    private void sendBucks() {
         System.out.println("-------------------------------------------");
         System.out.println("Users");
         System.out.println("ID          Name                  ");
@@ -150,49 +150,16 @@ public class App {
             return;
         }
 
-        Transfer transfer = new Transfer(currentUser.getUser().getId(), selectedUserId, selectedAmount);
-        tenmoService.sendBucks(transfer);
-	}
+        Transfer transferRequest = new Transfer(currentUser.getUser().getId(), selectedUserId, selectedAmount);
+        Transfer responseTransfer = tenmoService.sendBucks(transferRequest);
 
-
-
-//    private void sendBucks() {
-//        System.out.println("-------------------------------------------");
-//        System.out.println("Users");
-//        System.out.println("ID          Name                  ");
-//        System.out.println("-------------------------------------------");
-//        List<User> availableUsers =  tenmoService.getAllUsersExceptMyself();
-//
-//        for (User user : availableUsers) {
-//            System.out.println(user.getId() + "      " + user.getUsername());
-//        }
-//
-//        int selectedUserId = consoleService.promptForInt("Enter ID of user you are sending to (0 to cancel):");
-//        if (selectedUserId == 0) {
-//            return;
-//        }
-//        if (selectedUserId == currentUser.getUser().getId()) {
-//            System.out.println("Please select a valid userId");
-//            return;
-//        }
-//
-//        if ( !(availableUsers.contains(tenmoService.getUserById(selectedUserId))) ) {
-//            System.out.println("Please select a valid userId");
-//            return;
-//        }
-//
-//        double selectedAmount = consoleService.promptForBigDecimal("Enter the amount to transfer:").doubleValue();
-//
-//
-//        if (selectedAmount <= 0 || selectedAmount >=
-//                tenmoService.getAccountBalanceByUserId(currentUser.getUser().getId())) {
-//            System.out.println("Please enter a valid amount");
-//            return;
-//        }
-//
-//        Transfer transfer = new Transfer(currentUser.getUser().getId(), selectedUserId, selectedAmount);
-//        tenmoService.sendBucks(transfer);
-//    }
+        System.out.println("FROM: " + responseTransfer.getUserIdFrom());
+        System.out.println("TO: " + responseTransfer.getUserIdTo());
+        System.out.println("AMOUNT: " + responseTransfer.getAmount());
+        System.out.println("TRANSFER ID: " + responseTransfer.getTransferId());
+        System.out.println("TRANSFER TYPE ID: " + responseTransfer.getTransferTypeId());
+        System.out.println("TRANSFER STATUS ID: " + responseTransfer.getTransferStatusId());
+    }
 
 	private void requestBucks() {
 

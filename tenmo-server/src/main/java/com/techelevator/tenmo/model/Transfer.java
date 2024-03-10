@@ -14,10 +14,7 @@ public class Transfer {
     private int userIdTo;
     private BigDecimal amount;
 
-    public Transfer(int transferId, int transferTypeId, int transferStatusId, int userIdFrom, int userIdTo, BigDecimal amount) {
-        this.transferId = transferId;
-        this.transferTypeId = transferTypeId;
-        this.transferStatusId = transferStatusId;
+    public Transfer(int userIdFrom, int userIdTo, BigDecimal amount) {
         this.userIdFrom = userIdFrom;
         this.userIdTo = userIdTo;
         this.amount = amount;

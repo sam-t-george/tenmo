@@ -17,6 +17,7 @@ public class Transfer {
         this.userIdTo = userIdTo;
         this.amount = amount;
     }
+    public Transfer(){};
 
     public int getTransferId() {
         return transferId;

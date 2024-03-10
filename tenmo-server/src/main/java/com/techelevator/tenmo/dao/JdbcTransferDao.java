@@ -42,7 +42,7 @@ public class JdbcTransferDao implements TransferDao{
                 "RETURNING transfer_id;";
         try {
             int newTransferId = jdbcTemplate.queryForObject(sql, int.class,
-                    transfer.getTransferTypeId(), transfer.getTransferStatusId(), transfer.getUserIdFrom(),
+                    2, 2, transfer.getUserIdFrom(),
                     transfer.getUserIdTo(), transfer.getAmount());
             newTransfer = getTransferById(newTransferId);
         } catch (CannotGetJdbcConnectionException e) {

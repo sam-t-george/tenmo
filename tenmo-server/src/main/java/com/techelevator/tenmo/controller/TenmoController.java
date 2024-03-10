@@ -46,7 +46,7 @@ public class TenmoController {
         return allUsersExceptMyself;
     }
 
-    @RequestMapping(path="/send_bucks", method = RequestMethod.PUT)
+    @RequestMapping(path="/send_bucks", method = RequestMethod.POST)
     public Transfer sendBucks (Principal principal, @RequestBody Transfer transfer) {
             User userFrom = userDao.getUserByUsername(principal.getName());
             User userTo = userDao.getUserById(transfer.getUserIdTo());
