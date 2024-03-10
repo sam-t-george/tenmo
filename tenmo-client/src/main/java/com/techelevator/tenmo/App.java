@@ -108,6 +108,19 @@ public class App {
 
 	private void viewTransferHistory() {
 		// TODO Auto-generated method stub
+        List<Transfer> myTransfers = tenmoService.getMyTransfers(currentUser.getUser().getId());
+        System.out.println("TRANSFER HISTORY:");
+        for (Transfer transfer : myTransfers) {
+            System.out.println("************************************");
+            System.out.println("FROM: " + transfer.getUserIdFrom());
+            System.out.println("TO: " + transfer.getUserIdTo());
+            System.out.println("AMOUNT: " + transfer.getAmount());
+            System.out.println("TRANSFER ID: " + transfer.getTransferId());
+            System.out.println("TRANSFER TYPE ID: " + transfer.getTransferTypeId());
+            System.out.println("TRANSFER STATUS ID: " + transfer.getTransferStatusId());
+            System.out.println("**************************************");
+            System.out.println();
+        }
 		
 	}
 
@@ -115,7 +128,7 @@ public class App {
 		// TODO Auto-generated method stub
 		
 	}
-    
+
     private void sendBucks() {
         System.out.println("-------------------------------------------");
         System.out.println("Users");

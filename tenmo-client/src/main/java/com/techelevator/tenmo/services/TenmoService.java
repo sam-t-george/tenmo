@@ -58,6 +58,15 @@ public class TenmoService {
         return response.getBody();
     }
 
+    public List<Transfer> getMyTransfers(int currentUserId) {
+        List<Transfer> transfers = new ArrayList<>();
+        String url = BASE_API_URL + "/my_transfers";
+        ResponseEntity<Transfer[]> response = restTemplate.exchange(url, HttpMethod.GET,
+                makeAuthEntity(currentUser), Transfer[].class);
+        transfers = Arrays.asList(response.getBody());
+        return transfers;
+    }
+
 
 
 

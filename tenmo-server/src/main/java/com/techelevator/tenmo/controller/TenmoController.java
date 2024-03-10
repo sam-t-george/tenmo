@@ -55,15 +55,13 @@ public class TenmoController {
             return transfer;
     }
 
+    @RequestMapping(path="/my_transfers", method = RequestMethod.GET)
+    public List<Transfer> getTransfersByAccountFrom(Principal principal) {
+        User currentUser = userDao.getUserByUsername(principal.getName());
+        return transferDao.getTransfersByAccountFrom(currentUser.getId());
+    }
 
-//    @RequestMapping(path="/send_bucks", method = RequestMethod.PUT)
-//    public int sendBucks (Principal principal, @RequestBody Transfer transfer) {
-//        User userFrom = userDao.getUserByUsername(principal.getName());
-//        User userTo = userDao.getUserById(transfer.getUserIdTo());
-//        Transfer createdTransfer = transferDao.createTransfer(transfer);
-//        int status = createdTransfer.setTransferStatusId(2);
-//        return status;
-//    }
+
 
     @RequestMapping(path="/user/{user_id}", method= RequestMethod.GET)
     public User getUserById (@PathVariable int user_id) {
