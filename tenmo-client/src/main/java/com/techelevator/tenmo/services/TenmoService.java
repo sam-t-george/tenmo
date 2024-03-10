@@ -4,7 +4,10 @@ import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.AuthenticatedUser;
 import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.User;
+import com.techelevator.util.BasicLogger;
 import org.springframework.http.*;
+import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -42,7 +45,6 @@ public class TenmoService {
     }
 
     public User getUserById(int userId) {
-        User user = null;
         String url = BASE_API_URL + "/user/" + userId;
         ResponseEntity<User> response = restTemplate.exchange(url,HttpMethod.GET,
                 makeAuthEntity(currentUser), User.class);
@@ -65,6 +67,16 @@ public class TenmoService {
                 makeAuthEntity(currentUser), Transfer[].class);
         transfers = Arrays.asList(response.getBody());
         return transfers;
+    }
+
+    public Transfer getTransferById(int transferId) {
+        Transfer transfer = null;
+        try {
+            transfer = restTemplate.getForObject(BASE_API_URL + "reservations/" + transferId, Transfer.class);
+        } catch (RestClientResponseException | ResourceAccessException e) {
+            BasicLogger.log(e.getMessage());
+        }
+        return transfer;
     }
 
 

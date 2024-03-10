@@ -1,6 +1,8 @@
 package com.techelevator.tenmo.services;
 
 
+import com.techelevator.tenmo.model.AuthenticatedUser;
+import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.User;
 import com.techelevator.tenmo.model.UserCredentials;
 
@@ -8,9 +10,13 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Scanner;
 
+
 public class ConsoleService {
 
     private final Scanner scanner = new Scanner(System.in);
+
+    private AuthenticatedUser currentUser;
+    private TenmoService tenmoService = new TenmoService();
 
     public int promptForMenuSelection(String prompt) {
         int menuSelection;
@@ -94,16 +100,11 @@ public class ConsoleService {
         System.out.println("An error occurred. Check the log for details.");
     }
 
-    public void printAvailableUsers (List<User> availableUsers) {
-        System.out.println("-------------------------------------------");
-        System.out.println("Users");
-        System.out.println("ID          Name                  ");
-        System.out.println("-------------------------------------------");
-
-
-
-
+    public void printTransfers(List<Transfer> transfers) {
 
     }
 
+    public void printTransferDetails(List<Transfer> myTransfers, int selectedTransferId) {
+
+    }
 }

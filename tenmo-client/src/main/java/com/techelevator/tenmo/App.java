@@ -8,6 +8,7 @@ import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.ConsoleService;
 import com.techelevator.tenmo.services.TenmoService;
 
+import java.security.cert.TrustAnchor;
 import java.util.List;
 
 public class App {
@@ -107,26 +108,50 @@ public class App {
 	}
 
 	private void viewTransferHistory() {
-		// TODO Auto-generated method stub
         List<Transfer> myTransfers = tenmoService.getMyTransfers(currentUser.getUser().getId());
         System.out.println("TRANSFER HISTORY:");
         for (Transfer transfer : myTransfers) {
-            System.out.println("************************************");
-            System.out.println("FROM: " + transfer.getUserIdFrom());
-            System.out.println("TO: " + transfer.getUserIdTo());
-            System.out.println("AMOUNT: " + transfer.getAmount());
-            System.out.println("TRANSFER ID: " + transfer.getTransferId());
-            System.out.println("TRANSFER TYPE ID: " + transfer.getTransferTypeId());
-            System.out.println("TRANSFER STATUS ID: " + transfer.getTransferStatusId());
-            System.out.println("**************************************");
+            System.out.print("ID: " + transfer.getTransferId());
+            System.out.print("       ");
+            System.out.print("FROM: " + tenmoService.getUserById(transfer.getUserIdFrom()).getUsername());
+            System.out.print("       ");
+            System.out.print("TO: " + tenmoService.getUserById(transfer.getUserIdTo()).getUsername());
+            System.out.print("       ");
+            System.out.print("AMOUNT: " + transfer.getAmount());
             System.out.println();
+            System.out.println("******************************************************************");
         }
-		
+
+        int selectedTransferId = consoleService.promptForInt("Please enter transfer ID to view details (0 to cancel): ");
+        if (selectedTransferId == 0) {
+            return;
+        }
+        boolean listContainsSelectedTransferId = false;
+        for (Transfer transfer : myTransfers) {
+            if (selectedTransferId != transfer.getTransferId()) {
+                listContainsSelectedTransferId = false;
+            } else {
+                System.out.println("************************************");
+                System.out.println("TRANSFER ID: " + transfer.getTransferId());
+                System.out.println("FROM: " + tenmoService.getUserById(transfer.getUserIdFrom()).getUsername());
+                System.out.println("TO: " + tenmoService.getUserById(transfer.getUserIdTo()).getUsername());
+                System.out.println("TRANSFER TYPE ID: " + transfer.getTransferTypeId());
+                System.out.println("TRANSFER STATUS ID: " + transfer.getTransferStatusId());
+                System.out.println("AMOUNT: " + transfer.getAmount());
+                System.out.println("**************************************");
+                System.out.println();
+                listContainsSelectedTransferId = true;
+            }
+        }
+        if (listContainsSelectedTransferId == false) {
+            System.out.println("Please enter a valid ID.");
+        }
 	}
+
+
 
 	private void viewPendingRequests() {
 		// TODO Auto-generated method stub
-		
 	}
 
     private void sendBucks() {

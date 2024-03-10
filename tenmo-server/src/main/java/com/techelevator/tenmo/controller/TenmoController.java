@@ -5,8 +5,12 @@ import com.techelevator.tenmo.dao.TransferDao;
 import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.dao.UserDao;
 import com.techelevator.tenmo.model.User;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.RestClientResponseException;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.security.Principal;
@@ -61,6 +65,15 @@ public class TenmoController {
         return transferDao.getTransfersByAccountFrom(currentUser.getId());
     }
 
+    @RequestMapping(path = "/transfer_details/{transferId}", method = RequestMethod.GET)
+    public Transfer getTransferById(@PathVariable int transferId) {
+        Transfer transfer = transferDao.getTransferById(transferId);
+        if (transfer == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Transfer not found.");
+        } else {
+            return transfer;
+        }
+    }
 
 
     @RequestMapping(path="/user/{user_id}", method= RequestMethod.GET)
