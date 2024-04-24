@@ -18,8 +18,8 @@ public class App {
     public static final int LOGIN_MENU_LOGIN = 2;
     public static final int MAIN_MENU_VIEW_BALANCE = 1;
     public static final int MAIN_MENU_VIEW_TRANSFER_HISTORY = 2;
-    public static final int MAIN_MENU_VIEW_PENDING_REQUESTS = 3;
-    public static final int MAIN_MENU_SEND_TE_BUCKS = 4;
+    public static final int MAIN_MENU_VIEW_PENDING_REQUESTS = 4;
+    public static final int MAIN_MENU_SEND_TE_BUCKS = 3;
     public static final int MAIN_MENU_REQUEST_TE_BUCKS = 5;
 
     private static final String API_BASE_URL = "http://localhost:8080/";
